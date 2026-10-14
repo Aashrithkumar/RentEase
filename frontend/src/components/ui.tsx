@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 export const money=(paise:number=0)=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(paise/100);
 export const indianDate=(value:string)=>new Intl.DateTimeFormat('en-IN',{day:'2-digit',month:'short',year:'numeric',timeZone:'Asia/Kolkata'}).format(new Date(value));
 export const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata'}).format(new Date());
-export function Loading(){return <div className="loading" role="status"><Loader2 className="spin" size={24}/> Loading your next chapter…</div>;}
+export function Loading({message='Loading your next chapter…'}:{message?:string}){return <div className="loading" role="status"><Loader2 className="spin" size={24}/> {message}</div>;}
 export function ErrorState({message,onRetry}:{message:string;onRetry?:()=>void}){return <div className="state error-state" role="alert"><AlertCircle size={30}/><h3>We couldn’t load this</h3><p>{message}</p>{onRetry&&<button className="btn outline" onClick={onRetry}>Try again</button>}</div>;}
 export function Empty({title='Nothing here yet',description='Your records will appear here as you get started.',children}:{title?:string;description?:string;children?:ReactNode}){return <div className="state"><div className="state-icon"><Home size={30}/></div><h3>{title}</h3><p>{description}</p>{children}</div>;}
 export function Badge({children}:{children:ReactNode}){const s=String(children).toLowerCase().replaceAll(' ','-');return <span className={`badge ${s}`}>{children}</span>;}

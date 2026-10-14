@@ -108,7 +108,7 @@ If the frontend domain changes, update FRONTEND_URL on Render. If the backend do
 5. Confirm owner property creation/photos and authorized private PDF downloads work.
 6. Open /api/health through the frontend domain and confirm database connectivity.
 
-Free Render services sleep after 15 minutes without inbound traffic and can take about a minute to wake. Free services also block outbound SMTP ports 25, 465 and 587, so email starts disabled. Password-reset email requires a working provider and suitable hosting plan or provider integration; in-app notifications still work.
+Free Render services sleep after 15 minutes without inbound traffic and can take about a minute to wake. The frontend automatically retries temporary gateway failures for read queries with bounded delays and shows a reconnecting message while listings recover. It rejects HTML startup pages as API data and never automatically replays mutations. An extended outage still shows an error with a manual retry option. Free services also block outbound SMTP ports 25, 465 and 587, so email starts disabled. Password-reset email requires a working provider and suitable hosting plan or provider integration; in-app notifications still work.
 
 ## Email, reminders and administrator setup
 
@@ -122,6 +122,7 @@ To bootstrap a non-demo administrator, temporarily set ADMIN_NAME, ADMIN_EMAIL a
 
 ```powershell
 npm test
+npm run test -w frontend
 npm run build
 $env:RENDER_API_URL = 'https://your-service.onrender.com'
 npm run build:vercel -w frontend

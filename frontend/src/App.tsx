@@ -3,6 +3,7 @@ import { BrowserRouter,Routes,Route,Navigate,useLocation,Link } from 'react-rout
 import { QueryClient,QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
 import { AuthProvider,useAuth } from './context/AuthContext';
+import { shouldRetryQuery,queryRetryDelay } from './services/queryRetry';
 import { Loading,Empty } from './components/ui';
 import Header from './components/Header';
 const Home=lazy(()=>import('./pages/Home'));
@@ -21,7 +22,7 @@ const AdminOverview=lazy(()=>import('./pages/Admin').then(m=>({default:m.AdminOv
 const AdminManagement=lazy(()=>import('./pages/Admin').then(m=>({default:m.AdminManagement})));
 const AdminActivity=lazy(()=>import('./pages/Admin').then(m=>({default:m.AdminActivity})));
 const AdminAudit=lazy(()=>import('./pages/Admin').then(m=>({default:m.AdminAudit})));
-const cache=new QueryClient({defaultOptions:{queries:{staleTime:30000,retry:1,refetchOnWindowFocus:false}}});
+const cache=new QueryClient({defaultOptions:{queries:{staleTime:30000,retry:shouldRetryQuery,retryDelay:queryRetryDelay,refetchOnWindowFocus:false}}});
 function Protected({children,roles}:{children:ReactNode;roles?:string[]}){const {user,loading}=useAuth();const location=useLocation();if(loading)return <Loading/>;if(!user)return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname+location.search)}`} replace/>;if(roles&&!roles.includes(user.role))return <Empty title="This page belongs to another workspace" description="Use your dashboard to access your rental records."><Link className="btn" to="/dashboard">My dashboard</Link></Empty>;return children;}
 export default function App(){return <QueryClientProvider client={cache}><BrowserRouter><AuthProvider><Suspense fallback={<Loading/>}><Routes>
   <Route path="/" element={<Home/>}/><Route path="/properties" element={<Properties/>}/><Route path="/properties/:id" element={<PropertyDetail/>}/><Route path="/saved" element={<Properties savedOnly/>}/><Route path="/guides" element={<Guides/>}/>

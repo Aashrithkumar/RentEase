@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type { User } from '../types';
+import { BackendUnavailableError } from './queryRetry';
 export const api=axios.create({baseURL:import.meta.env.VITE_API_URL||'/api/v1',withCredentials:true});
 let accessToken='';let refreshing:Promise<{user:User;accessToken:string}>|null=null;
 export const setAccessToken=(value:string)=>{accessToken=value;};
@@ -14,7 +15,13 @@ api.interceptors.response.use(r=>r,async error=>{
     c._retried=true;try{await refreshSession();return api(c);}catch{setAccessToken('');window.dispatchEvent(new Event('rentease:signedout'));}
   }return Promise.reject(error);
 });
-export async function get<T>(path:string){return (await api.get<{data:T}>(path)).data.data;}
+export async function get<T>(path:string){
+  const response = await api.get<{success:boolean;data:T}>(path, {timeout:15000});
+  if (!response.data || response.data.success !== true || response.data.data === undefined) {
+    throw new BackendUnavailableError();
+  }
+  return response.data.data;
+}
 export async function post<T=unknown>(path:string,body:unknown){return (await api.post<{data:T}>(path,body)).data.data;}
 export async function patch<T=unknown>(path:string,body:unknown){return (await api.patch<{data:T}>(path,body)).data.data;}
 export const errorMessage=(error:unknown)=>axios.isAxiosError(error)?error.response?.data?.message||'Cannot reach RentEase. Please try again.':error instanceof Error?error.message:'Something went wrong.';
