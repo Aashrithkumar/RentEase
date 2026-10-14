@@ -2,6 +2,8 @@
 
 MERN rental property management with a 99acres-inspired public search interface, RentEase branding, and owner, tenant and administrator workspaces. The design follows the photo banner, overlaid navigation, tabbed search and exploration cards, adapted to rental workflows. It is not an exact reproduction of every 99acres page.
 
+Live website: **https://rentease-aashrithkumar.vercel.app**. The administration panel is at **https://rentease-aashrithkumar.vercel.app/admin**. The API runs on Render at **https://rentease-api-xay8.onrender.com**. See the [deployment guide](docs/DEPLOYMENT.md) for hosting settings and future updates.
+
 ## Run in VS Code
 
 1. Select **File → Open Folder** and open `RentEase1`.

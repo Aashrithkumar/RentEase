@@ -2,6 +2,18 @@
 
 Repository: https://github.com/Aashrithkumar/RentEase
 
+## Current deployment
+
+- Website: https://rentease-aashrithkumar.vercel.app
+- Administration: https://rentease-aashrithkumar.vercel.app/admin
+- Backend health: https://rentease-api-xay8.onrender.com/api/health
+- Render service: https://dashboard.render.com/web/srv-db7pk2ivcj2c73eg2og0
+- Vercel project: https://vercel.com/aashrithkumars-projects/rentease
+
+The services use the existing Atlas development database, including labelled demo records. Render has a new generated production JWT secret. The canonical frontend origin is configured on Render, and Vercel forwards API traffic to the backend.
+
+The backend was created using the public Git URL. Such Render services require manual deployment until the Git provider is connected, even if an auto-deploy preference is present. For future backend changes, push to GitHub and choose **Manual Deploy → Deploy latest commit** in Render. Connect your Git provider in Render to enable automatic deployment. Set the health-check path to `/api/health` in the service settings; the creation connector cannot set this field.
+
 Both services use this repository and its root package-lock.json. Database, JWT, SMTP and Cloudinary secrets belong on Render only. Local .env files and demo passwords are excluded from Git.
 
 ## 1. Upload the project
@@ -118,4 +130,4 @@ Remove-Item Env:RENDER_API_URL
 
 The last build produces ignored frontend/.vercel/output/config.json and static files. This validates packaging; actual HTTPS login, uploads and email need verification after publishing.
 
-Official documentation: [Render Node deployment](https://render.com/docs/deploy-node-express-app), [Render monorepos](https://render.com/docs/monorepo-support), [Render Blueprints](https://render.com/docs/blueprint-spec), [Render free-service limits](https://render.com/docs/free), [Vercel monorepos](https://vercel.com/docs/monorepos), [Vercel Build Output API](https://vercel.com/docs/build-output-api), [Vercel external rewrites](https://vercel.com/docs/routing/rewrites).
+Official documentation: [Render Node deployment](https://render.com/docs/deploy-node-express-app), [Render monorepos](https://render.com/docs/monorepo-support), [Render Blueprints](https://render.com/docs/blueprint-spec), [Render free-service limits](https://render.com/docs/free), [Render deploys and public Git URLs](https://render.com/docs/deploys), [Vercel monorepos](https://vercel.com/docs/monorepos), [Vercel Build Output API](https://vercel.com/docs/build-output-api), [Vercel external rewrites](https://vercel.com/docs/routing/rewrites).
