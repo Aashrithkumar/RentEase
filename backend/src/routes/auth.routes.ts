@@ -1,0 +1,16 @@
+import { Router } from 'express';
+import { auth } from '../middleware/auth.middleware.js';
+import { authLimiter } from '../middleware/rate-limit.middleware.js';
+import { register, login, refresh, logout, getCurrentUser, updateProfile, changePassword, forgotPassword, resetPassword } from '../controllers/auth.controller.js';
+const router = Router();
+router.use(authLimiter);
+router.post('/register', register);
+router.post('/login', login);
+router.post('/refresh', refresh);
+router.post('/logout', logout);
+router.get('/me', auth, getCurrentUser);
+router.patch('/profile', auth, updateProfile);
+router.post('/change-password', auth, changePassword);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
+export default router;

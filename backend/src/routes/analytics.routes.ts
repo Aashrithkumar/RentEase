@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { roles } from '../middleware/auth.middleware.js';
+import { getAnalyticsOverview, getAnalyticsRevenue, getAnalyticsExpenses, getAnalyticsOccupancy, getAnalyticsPaymentStatus } from '../controllers/analytics.controller.js';
+const router = Router();
+router.get('/overview', getAnalyticsOverview);
+router.get('/revenue', roles('owner', 'admin'), getAnalyticsRevenue);
+router.get('/expenses', roles('owner', 'admin'), getAnalyticsExpenses);
+router.get('/occupancy', roles('owner', 'admin'), getAnalyticsOccupancy);
+router.get('/payment-status', roles('owner', 'admin'), getAnalyticsPaymentStatus);
+export default router;

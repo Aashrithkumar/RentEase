@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { roles } from '../middleware/auth.middleware.js';
+import { idParam } from '../middleware/validation.middleware.js';
+import { getApplication, getApplicationById, postApplication, patchApplicationStatusById } from '../controllers/application.controller.js';
+const router = Router();
+router.get('/', getApplication);
+router.get('/:id', idParam, getApplicationById);
+router.post('/', roles('tenant'), postApplication);
+router.patch('/:id/status', idParam, patchApplicationStatusById);
+export default router;

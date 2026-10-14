@@ -1,0 +1,26 @@
+import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import { config } from './config/env.js';
+import { corsOptions } from './config/cors.js';
+import { validateOrigin } from './middleware/security.middleware.js';
+import { apiLimiter } from './middleware/rate-limit.middleware.js';
+import { requireDatabase } from './middleware/database.middleware.js';
+import { errorHandler, notFound } from './middleware/error.middleware.js';
+import { health } from './controllers/health.controller.js';
+import routes from './routes/index.js';
+export const app = express();
+app.disable('x-powered-by');
+if (config.production)
+    app.set('trust proxy', 1);
+app.use(helmet());
+app.use(cors(corsOptions));
+app.use(express.json({ limit: '100kb' }));
+app.use(cookieParser());
+app.use(validateOrigin);
+app.get('/api/health', health);
+app.use('/api', apiLimiter);
+app.use('/api/v1', requireDatabase, routes);
+app.use(notFound);
+app.use(errorHandler);

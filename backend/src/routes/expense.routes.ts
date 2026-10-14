@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { roles } from '../middleware/auth.middleware.js';
+import { idParam } from '../middleware/validation.middleware.js';
+import { privateUpload } from '../middleware/upload.middleware.js';
+import { getExpense, postExpense, patchExpenseById, deleteExpenseById, postExpenseReceiptById, getExpenseReceiptById } from '../controllers/expense.controller.js';
+const router = Router();
+router.get('/', roles('owner'), getExpense);
+router.post('/', roles('owner'), postExpense);
+router.patch('/:id', roles('owner'), idParam, patchExpenseById);
+router.delete('/:id', roles('owner'), idParam, deleteExpenseById);
+router.post('/:id/receipt', roles('owner'), idParam, privateUpload.single('receipt'), postExpenseReceiptById);
+router.get('/:id/receipt', roles('owner'), idParam, getExpenseReceiptById);
+export default router;

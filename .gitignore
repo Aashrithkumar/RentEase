@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+coverage/
+backend/uploads/
+demo-credentials.txt
+artifacts/
+backend/.local-mail.json
+.npm-cache/
+backend/artifacts/
+frontend/tsconfig.tsbuildinfo
+.vercel/

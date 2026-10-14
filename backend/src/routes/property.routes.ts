@@ -1,0 +1,16 @@
+import { Router } from 'express';
+import { auth, roles } from '../middleware/auth.middleware.js';
+import { idParam, propertyIdParam } from '../middleware/validation.middleware.js';
+import { upload } from '../middleware/upload.middleware.js';
+import { listProperties, listOwnedProperties, getOwnedProperty, getProperty, createProperty, updateProperty, archiveProperty, uploadPropertyImages } from '../controllers/property.controller.js';
+const router = Router();
+router.param('id', propertyIdParam);
+router.get('/', listProperties);
+router.get('/mine', auth, roles('owner'), listOwnedProperties);
+router.get('/mine/:id', auth, roles('owner'), idParam, getOwnedProperty);
+router.get('/:id', idParam, getProperty);
+router.post('/', auth, roles('owner'), createProperty);
+router.patch('/:id', auth, roles('owner'), idParam, updateProperty);
+router.delete('/:id', auth, roles('owner'), idParam, archiveProperty);
+router.post('/:id/images', auth, roles('owner'), idParam, upload.array('images', 8), uploadPropertyImages);
+export default router;

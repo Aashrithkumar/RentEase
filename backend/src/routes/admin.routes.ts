@@ -1,0 +1,18 @@
+import { Router } from 'express';
+import { auth, roles } from '../middleware/auth.middleware.js';
+import { idParam } from '../middleware/validation.middleware.js';
+import { getAdminOverview, getAdminUsers, getAdminUsersById, patchAdminUsersStatusById, getAdminProperties, getAdminPropertiesById, patchAdminPropertiesModerationById, patchAdminPropertiesStatusById, getAdminActivity, getAdminAudit, getAdminAnalytics } from '../controllers/admin.controller.js';
+const router = Router();
+router.use(auth, roles('admin'));
+router.get('/overview', getAdminOverview);
+router.get('/users', getAdminUsers);
+router.get('/users/:id', idParam, getAdminUsersById);
+router.patch('/users/:id/status', idParam, patchAdminUsersStatusById);
+router.get('/properties', getAdminProperties);
+router.get('/properties/:id', idParam, getAdminPropertiesById);
+router.patch('/properties/:id/moderation', idParam, patchAdminPropertiesModerationById);
+router.patch('/properties/:id/status', idParam, patchAdminPropertiesStatusById);
+router.get('/activity', getAdminActivity);
+router.get('/audit', getAdminAudit);
+router.get('/analytics', roles('admin'), getAdminAnalytics);
+export default router;

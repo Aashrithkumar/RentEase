@@ -1,0 +1,39 @@
+# Create a Blueprint from this repository in Render. Keep the root directory blank:
+# both npm workspaces share the repository's package-lock.json.
+services:
+  - type: web
+    name: rentease-api
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev && npm run build -w backend
+    startCommand: npm run start -w backend
+    healthCheckPath: /api/health
+    buildFilter:
+      paths:
+        - backend/**
+        - frontend/package.json
+        - package.json
+        - package-lock.json
+        - .node-version
+        - render.yaml
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 22
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SCHEDULER_SECRET
+        generateValue: true
+      - key: MONGO_URI
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: EMAIL_MODE
+        value: disabled

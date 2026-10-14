@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { roles } from '../middleware/auth.middleware.js';
+import { idParam } from '../middleware/validation.middleware.js';
+import { privateUpload } from '../middleware/upload.middleware.js';
+import { getLease, getLeaseById, postLease, patchLeaseById, postLeaseDocumentById, getLeaseDocumentById } from '../controllers/lease.controller.js';
+const router = Router();
+router.get('/', getLease);
+router.get('/:id', idParam, getLeaseById);
+router.post('/', roles('owner'), postLease);
+router.patch('/:id', roles('owner'), idParam, patchLeaseById);
+router.post('/:id/document', roles('owner'), idParam, privateUpload.single('document'), postLeaseDocumentById);
+router.get('/:id/document', idParam, getLeaseDocumentById);
+export default router;
