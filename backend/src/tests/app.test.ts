@@ -15,7 +15,7 @@ const listing = { title: 'Bright 2 BHK home in Whitefield', description: 'A spac
 beforeAll(async () => { db = await MongoMemoryReplSet.create({ replSet: { count: 1 }, binary: { version: '7.0.14', downloadDir: resolve('artifacts/mongodb-binaries') } }); await mongoose.connect(db.getUri()); await Promise.all(Object.values(mongoose.models).map(m => m.init())); });
 afterAll(async () => { await mongoose.disconnect(); if (db)
     await db.stop(); });
-describe.sequential('RentEase security and rental workflows', () => {
+describe('RentEase security and rental workflows', { concurrent: false }, () => {
     it('blocks public admin registration', async () => { const r = await request(app).post('/api/v1/auth/register').send(user('Admin', 'admin')); expect(r.status).toBe(400); });
     it('registers users and keeps password hashes private', async () => { for (const [name, role] of [['Owner', 'owner'], ['Tenant', 'tenant'], ['OtherOwner', 'owner'], ['OtherTenant', 'tenant']]) {
         const r = await request(app).post('/api/v1/auth/register').send(user(name, role));
